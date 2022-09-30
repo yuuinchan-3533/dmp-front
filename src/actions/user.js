@@ -1,4 +1,7 @@
 import appConfig from '../config';
+import{
+  signIn
+} from '../api/firebaseAuthApi';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -21,7 +24,7 @@ export function receiveLogin(user) {
     type: LOGIN_SUCCESS,
     isFetching: false,
     isAuthenticated: true,
-    id_token: user.id_token,
+    id_token: user.stsTokenManager.accessToken,
   };
 }
 
@@ -61,34 +64,34 @@ export function logoutUser() {
 }
 
 export function loginUser(creds) {
-  const config = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    credentials: 'include',
-    body: `login=${creds.login}&password=${creds.password}`,
-  };
+
+  alert("need to be update");
+  
   
   return dispatch => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds));
+    
     if(process.env.NODE_ENV === "development") {
-    return fetch('/login', config)
-      .then(response => response.json().then(user => ({ user, response })))
-      .then(({ user, response }) => {
-        if (!response.ok) {
-          // If there was a problem, we want to
-          // dispatch the error condition
-          dispatch(loginError(user.message));
-          return Promise.reject(user);
-        }
-        // in posts create new action and check http status, if malign logout
-        // If login was successful, set the token in local storage
-        localStorage.setItem('id_token', user.id_token);
+    return signIn(creds.email,creds.password)
+      .then(response => {
+        if(response.uid!==undefined){
+          localStorage.setItem('id_token', response.stsTokenManager.accessToken);
         // Dispatch the success action
-        dispatch(receiveLogin(user));
-        return Promise.resolve(user);
+          dispatch(receiveLogin(response));
+          return Promise.resolve(response);
+        }else{
+          dispatch(loginError(response));
+          return Promise.reject(response);
+        }
+
       })
-      .catch(err => console.error('Error: ', err));
+      .catch(err => {
+        
+          
+        console.error('Error: ', err)
+        
+      });
     } else {
       localStorage.setItem('id_token', appConfig.id_token);
       dispatch(receiveLogin({id_token: appConfig.id_token}))

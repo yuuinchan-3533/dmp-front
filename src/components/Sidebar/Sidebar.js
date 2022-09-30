@@ -21,6 +21,26 @@ const Sidebar = () => (
         glyph="dashboard"
       />
       <LinksGroup
+        header="User"
+        headerLink="/app/user"
+        glyph="user"
+      />
+      <LinksGroup
+        header="Images"
+        headerLink="/app/images"
+        glyph="dockerimage"
+      />
+      <LinksGroup
+        header="Containers"
+        headerLink="/app/containers"
+        glyph="endpoints"
+      />
+      <LinksGroup
+        header="Volumes"
+        headerLink="/app/volumes"
+        glyph="volume"
+      />
+      <LinksGroup
         header="Typography"
         headerLink="/app/typography"
         glyph="typography"

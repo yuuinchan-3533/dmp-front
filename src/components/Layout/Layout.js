@@ -18,6 +18,9 @@ import Sidebar from '../Sidebar';
 
 // Dashboard component is loaded directly as an example of server side rendering
 import Dashboard from '../../pages/dashboard'
+import User from '../../pages/user/Users'
+import Images from '../../pages/images/Image'
+import Containers from '../../pages/containers'
 import Buttons from '../../pages/buttons'
 import Charts from '../../pages/charts'
 import Maps from '../../pages/google'
@@ -29,6 +32,10 @@ import Notifications from '../../pages/notifications'
 import Posts from '../../pages/posts'
 import Profile from '../../pages/profile'
 import Privacy from '../../pages/privacy'
+import Volumes from '../../pages/volumes/Volumes';
+import Volume from '../../pages/volumes/volume';
+import Users from '../../pages/user/Users';
+import UserProfile from '../../pages/user/UserProfile';
 
 class Layout extends React.Component {
   constructor(props) {
@@ -46,7 +53,7 @@ class Layout extends React.Component {
         <div
           className={cx(s.wrap, {[s.sidebarOpen]: this.state.sidebarOpen})}
         >
-          <Header
+          <NewHeader
             sidebarToggle={() =>
               this.setState({
                 sidebarOpen: !this.state.sidebarOpen,
@@ -56,6 +63,12 @@ class Layout extends React.Component {
           <main className={s.content}>
             <Switch>
               <Route path="/app/main" exact component={Dashboard} />
+              <Route path="/app/user" exact component={Users} />
+              <Route path="/app/users/add" exact component={UserProfile} />
+              <Route path="/app/images" exact component={Images} />
+              <Route path="/app/containers" exact component={Containers} />
+              <Route path="/app/volumes" exact component={Volumes} />
+              <Route path="/app/volumes/add" exact component={Volume} />
               <Route path="/app/typography" exact component={Typography} />
               <Route path="/app/tables" exact component={Tables} />
               <Route path="/app/posts" component={Posts} />

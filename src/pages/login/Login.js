@@ -17,6 +17,9 @@ import Footer from "../../components/Footer";
 import { loginUser } from '../../actions/user';
 import jwt from 'jsonwebtoken';
 import config from '../../config'
+import{
+  signIn
+} from '../../api/firebaseAuthApi';
 
 class Login extends React.Component {
   static propTypes = {
@@ -47,23 +50,24 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
-      login: 'user',
-      password: 'password',
+      email: '',
+      password: '',
     };
   }
 
-  changeLogin = (event) => {
-    this.setState({login: event.target.value});
+  changeEmail = (event) => {
+    this.setState({email: event.target.value});
   }
 
   changePassword = (event) => {
+    alert(event.target.value);
     this.setState({password: event.target.value});
   }
 
   doLogin = (e) => {
     this.props.dispatch(
       loginUser({
-        login: this.state.login,
+        email: this.state.email,
         password: this.state.password,
       }),
     );
@@ -100,8 +104,8 @@ class Login extends React.Component {
                   <FormGroup className="form-group">
                     <Input
                       className="no-border"
-                      value={this.state.login}
-                      onChange={this.changeLogin}
+                      value={this.state.email}
+                      onChange={this.changeEmail}
                       type="text"
                       required
                       name="username"

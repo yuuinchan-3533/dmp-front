@@ -31,6 +31,9 @@ import Icon from '../Icon';
 import photo from '../../images/photo.jpg';
 import { logoutUser } from '../../actions/user';
 import s from './Header.module.scss';
+import{
+  parseUser
+} from '../../api/firebaseAuthApi';
 
 class Header extends React.Component {
   static propTypes = {
@@ -38,11 +41,21 @@ class Header extends React.Component {
     dispatch: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      currentUser:null,
+      isOpen:false
+    };
+    this.componentDidMount = this.componentDidMount.bind(this);
+  }
+
   static defaultProps = {
     sidebarToggle: () => {},
   };
 
-  state = { isOpen: false };
+  
 
   toggleDropdown = () => {
     this.setState(prevState => ({
@@ -53,6 +66,21 @@ class Header extends React.Component {
   doLogout = () => {
     this.props.dispatch(logoutUser());
   }
+
+  componentDidMount(){
+    
+    async function setUser(_this) {
+      parseUser().then((res)=>{
+        alert("res"+JSON.stringify(res));
+        _this.setState({ currentUser: res });
+      })
+    }
+    setUser(this);
+    alert(JSON.stringify(this.state.currentUser));
+    
+  }
+
+  
 
   render() {
     const {isOpen} = this.state;
@@ -96,7 +124,7 @@ class Header extends React.Component {
           <Dropdown isOpen={isOpen} toggle={this.toggleDropdown}>
             <DropdownToggle nav>
               <img className={cx('rounded-circle mr-sm', s.adminPhoto)} src={photo} alt="administrator" />
-              <span className="text-body">Administrator</span>
+              <span className="text-body">kugou</span>
               <i className={cx('fa fa-angle-down ml-sm', s.arrow, {[s.arrowActive]: isOpen})} />
             </DropdownToggle>
             <DropdownMenu style={{width: '100%'}}>

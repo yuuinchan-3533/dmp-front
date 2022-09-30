@@ -7,11 +7,12 @@ import { ToastContainer } from 'react-toastify';
 import ErrorPage from '../pages/error';
 
 import '../styles/theme.scss';
-import LayoutComponent from '../components/Layout';
+import NewLayout from '../components/Layout';
 //import DocumentationLayoutComponent from '../documentation/DocumentationLayout';
 import Login from '../pages/login';
 import Register from '../pages/register';
 import { logoutUser } from '../actions/user';
+import { AuthProvider } from '../context/AuthContext';
 
 const PrivateRoute = ({dispatch, component, ...rest }) => {
     if (!Login.isAuthenticated(localStorage.getItem('id_token'))) {
@@ -26,8 +27,8 @@ const PrivateRoute = ({dispatch, component, ...rest }) => {
 
 const CloseButton = ({closeToast}) => <i onClick={closeToast} className="la la-close notifications-close"/>
 
-class App extends React.PureComponent {
-  render() {
+function App(props) {
+  
     return (
         <div>
             <ToastContainer
@@ -36,10 +37,11 @@ class App extends React.PureComponent {
                 closeButton={<CloseButton/>}
             />
             <HashRouter>
+                <AuthProvider>
                 <Switch>
                     <Route path="/" exact render={() => <Redirect to="/app/main"/>}/>
                     <Route path="/app" exact render={() => <Redirect to="/app/main"/>}/>
-                    <PrivateRoute path="/app" dispatch={this.props.dispatch} component={LayoutComponent}/>
+                    <PrivateRoute path="/app" dispatch={props.dispatch} component={NewLayout}/>
                     <Route path="/documentation" exact
                            render={() => <Redirect to="/documentation/getting-started/overview"/>}/>
                     {/* <Route path="/documentation" component={DocumentationLayoutComponent}/> */}
@@ -47,11 +49,12 @@ class App extends React.PureComponent {
                     <Route path="/login" exact component={Login}/>
                     <Route path="/error" exact component={ErrorPage}/>
                 </Switch>
+                </AuthProvider>
             </HashRouter>
         </div>
 
     );
-  }
+  
 }
 
 const mapStateToProps = state => ({
