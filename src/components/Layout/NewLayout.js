@@ -53,7 +53,7 @@
            />
            <main className={s.content}>
              <Switch>
-               <Route path="/app/main" exact component={Dashboard} />
+               <Route path="/app/main" exact component={Profile} />
                <Route path="/app/user" exact component={Users} />
                <Route path="/app/users/add" exact component={UserProfile} />
                <Route path="/app/images" exact component={Images} />
