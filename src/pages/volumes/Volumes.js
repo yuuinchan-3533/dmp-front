@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState,useEffect } from 'react';
 import {
   Row,
   Col,
@@ -27,39 +27,37 @@ import {
   removeVolume
 } from '../../api/dockerVolumeApi';
 
+import { useAuth } from "../../context/AuthContext";
+
 import Widget from '../../components/Widget/Widget';
 import s from './Static.module.scss';
 
-class Volumes extends Component {
+const Volumes = (props) => {
 
-  
+  const [volumes, setVolumes] = useState([]);
+  const [volumeId,setVolumeId] = useState("");
+  const { currentUser, logout } = useAuth();
+  const [displayButton, setDisplayButton] = useState("");
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      volumes:[],
-      volumeId:""
-    };
-
-    this.checkAll = this.checkAll.bind(this);
-
-    this.componentDidMount = this.componentDidMount.bind(this);
-    
-  }
-
-  componentDidMount(){
-    
+  useEffect(() => {
     async function setContainers(_this) {
       getVolumes().then((res)=>{
-        _this.setState({ volumes: res });
+        setVolumes(res);
       })
     }
     setContainers(this);
-    
-  }
+    async function setDisplay() {
+      if (currentUser.type != 0) {
+        setDisplayButton('none');
+      }
 
-  timeStampToDate(timeStamp){
+    }
+    setDisplay();
+  }, [])
+
+  
+
+  function timeStampToDate(timeStamp){
     var date = new Date(timeStamp*1000);
     var Y = date.getFullYear() + '-';
     var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
@@ -72,12 +70,12 @@ class Volumes extends Component {
 
   
 
-  parseDate(date) {
+  function parseDate(date) {
     this.dateSet = date.toDateString().split(' ');
     return `${date.toLocaleString('en-us', { month: 'long' })} ${this.dateSet[2]}, ${this.dateSet[3]}`;
   }
 
-  parseIP(ports){
+  function parseIP(ports){
     if(ports.length<1){
       return "";
     }else{
@@ -85,7 +83,7 @@ class Volumes extends Component {
     }
   }
 
-  parsePublicPort(ports){
+  function parsePublicPort(ports){
     if(ports.length<1){
       return "";
     }else{
@@ -94,36 +92,27 @@ class Volumes extends Component {
 
   }
 
-  parseVolumeName(volumeName){
+  function parseVolumeName(volumeName){
     var name=volumeName.slice(0,12);
     return name;
   }
 
-  parseContainerName(containerName) {
+  function parseContainerName(containerName) {
     var name=containerName.slice(1);
     return name;
   }
 
-  checkAll(ev, checkbox) {
+  function checkAll(ev, checkbox) {
     const checkboxArr = (new Array(this.state[checkbox].length)).fill(ev.target.checked);
     this.setState({
       [checkbox]: checkboxArr,
     });
   }
 
-  toSetTargetVolumeId(ev,id){
-    
-    
-    this.setState(
-      {
-        volumeId:id,
-      }
-    );
+  function toSetTargetVolumeId(ev,id){
+    setVolumeId(id);
   }
 
-  
-
-  render() {
     return (
       <div>
         <Breadcrumb>
@@ -140,10 +129,10 @@ class Volumes extends Component {
           <Widget>
               <h3>Volume <span className="fw-semi-bold">List</span></h3>
               
-              <div>
+              <div style={{ display: displayButton }}>
                 
                 <Button color="warning" className="width-100 mb-xs mr-xs"
-                onClick={() => removeVolume(this.state.volumeId)}>Remove</Button>
+                onClick={() => removeVolume(volumeId)}>Remove</Button>
                   
                 <Button color="primary" className="width-100 mb-xs mr-xs">
                   
@@ -169,15 +158,15 @@ class Volumes extends Component {
                   </thead>
                   <tbody>
                   {
-                  (this.state.volumes||[]).map(row =>
+                  (volumes||[]).map(row =>
                     <tr key={1}>
                       <td>  
                           <Input id="volumeRadioCheck" type="radio" name="volumeRadio"
-                            onChange={event => this.toSetTargetVolumeId(event,row.Name)}
+                            onChange={event => toSetTargetVolumeId(event,row.Name)}
                           />
                       </td>
                       
-                      <td>{this.parseVolumeName(row.Name)}</td>
+                      <td>{parseVolumeName(row.Name)}</td>
                       
                       <td>{row.Driver}</td>
                       
@@ -203,7 +192,7 @@ class Volumes extends Component {
         
       </div>
     );
-  }
+  
 
 }
 

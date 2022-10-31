@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import {
   Row,
   Col,
@@ -12,9 +12,13 @@ import {
   BreadcrumbItem,
 } from 'reactstrap';
 
-import{
+import {
   createUser
 } from '../../api/firebaseAuthApi';
+
+import {
+  createUserInfo
+} from '../../api/fireStoreApi';
 
 import Widget from '../../components/Widget';
 
@@ -26,50 +30,65 @@ class UserProfile extends PureComponent {
     super(props);
 
     this.state = {
-        email:'',
-        password:'',
-        isPasswordSame:false,
+      email: '',
+      password: '',
+      isPasswordSame: false,
+      userType:1,
     };
 
 
-   
+
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.checkSamePassword=this.checkSamePassword.bind(this);
-    this.onSubmit=this.onSubmit.bind(this);
+    this.checkSamePassword = this.checkSamePassword.bind(this);
+    this.handleUserTypeChange = this.handleUserTypeChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
-}
+  }
 
-  onSubmit(e) { 
+  onSubmit(e) {
     e.preventDefault();
-    if(this.state.isPasswordSame===false){
-      alert("两次密码不同")
+    alert(this.state.userType)
+    if (this.state.isPasswordSame === false) {
+      alert("passwords are different")
     }
-    createUser(this.state.email,this.state.password).then(
-      (res)=>{
+    createUser(this.state.email, this.state.password).then(
+      (res) => {
         alert(JSON.stringify(res.uid))
-        if(res.user !== undefined){
-          alert("hello"+JSON.stringify(res.user));
-        }
+        res.userType=this.state.userType;
+        var userInfo;
+        var userInfo = {email:this.state.email, uid:res.uid, userType:this.state.userType};
         
+        createUserInfo(userInfo);
+
+
+        if (res.user !== undefined) {
+          alert("hello" + JSON.stringify(res.user));
+        }
+
       }
     );
-    
+
   }
 
   handleEmailChange(e) {
-    
+
     this.setState({ email: e.target.value });
   }
 
   handlePasswordChange(e) {
-   
+
     this.setState({ password: e.target.value });
   }
 
-  checkSamePassword(e){
-    
-    if(e.target.value === this.state.password){
+  handleUserTypeChange(e) {
+
+    this.setState({ userType: e.target.value });
+  }
+
+  checkSamePassword(e) {
+
+    if (e.target.value === this.state.password) {
       alert("passwod is same");
       this.setState({ isPasswordSame: true });
     }
@@ -95,36 +114,59 @@ class UserProfile extends PureComponent {
               <Form onSubmit={this.onSubmit}>
                 <FormGroup>
                   <Label for="input-email">Email</Label>
-                  <Input 
-                  bsSize="lg" 
-                  type="email" 
-                  name="email" 
-                  value={this.state.email}
-                  onChange={this.handleEmailChange}
-                  id="input-email"/>
+                  <Input
+                    bsSize="lg"
+                    type="email"
+                    name="email"
+                    value={this.state.email}
+                    onChange={this.handleEmailChange}
+                    id="input-email" />
                 </FormGroup>
                 <FormGroup>
                   <Label for="input-password">Password</Label>
-                  <Input 
-                  bsSize="lg" 
-                  type="password" 
-                  name="password" 
-                  id="input-password"
-                  value={this.state.password}
-                  onChange={this.handlePasswordChange}/>
+                  <Input
+                    bsSize="lg"
+                    type="password"
+                    name="password"
+                    id="input-password"
+                    value={this.state.password}
+                    onChange={this.handlePasswordChange} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="input-password">Reinput-Password</Label>
-                  <Input 
-                  bsSize="lg" 
-                  type="password" 
-                  name="repassword" 
-                  id="reinput-password"
-                  onChange={this.checkSamePassword}
+                  <Input
+                    bsSize="lg"
+                    type="password"
+                    name="repassword"
+                    id="reinput-password"
+                    onChange={this.checkSamePassword}
                   />
                 </FormGroup>
+                <FormGroup>
+                  <Label for="userType">
+                    User Type
+                  </Label>
+                  <Input
+                    id="userType"
+                    name="userTypeSelect"
+                    type="select"
+                    onChange={this.handleUserTypeChange}
+                  >
+                    <option value={3}>
+                      Operation Engineer
+                    </option>
+                    <option value={1}>
+                      Software Developer
+                    </option>
+                    <option value={2}>
+                      Team Leader
+                    </option>
+                  </Input>
+
+
+                </FormGroup>
                 <div className="d-flex justify-content-between align-items-center">
-                  
+
                   <ButtonGroup className="pull-right">
                     <Button className="ml-sm" color="default">Cancel</Button>
                     <Button color="danger">Save</Button>

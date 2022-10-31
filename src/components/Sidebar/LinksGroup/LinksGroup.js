@@ -17,6 +17,7 @@ class LinksGroup extends Component {
     childrenLinks: PropTypes.array,
     glyph: PropTypes.string,
     className: PropTypes.string,
+    display: PropTypes.number,
   };
   /* eslint-enable */
 
@@ -25,6 +26,7 @@ class LinksGroup extends Component {
     childrenLinks: null,
     className: '',
     glyph: null,
+    display: 0,
   };
 
   constructor(props) {
@@ -36,8 +38,12 @@ class LinksGroup extends Component {
   }
 
   render() {
-    const { className, childrenLinks, headerLink, header, glyph } = this.props;
+    const { className, childrenLinks, headerLink, header, glyph, display } = this.props;
     const { isOpen } = this.state;
+    if (display!=0){
+      
+      return null;
+    }
     if (!childrenLinks) {
       return (
         <li className={cx(s.headerLink, className)}>

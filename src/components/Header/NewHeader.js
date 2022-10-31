@@ -89,23 +89,7 @@
            </NavItem>
          </Nav>
          <Nav className="ml-auto">
-           <NavItem className={cx('', s.headerIcon)}>
-             <Button>
-               <Icon glyph="mail"/>
-               <span>8</span>
-             </Button>
-           </NavItem>
-           <NavItem className={cx('', s.headerIcon)}>
-             <Button>
-               <Icon glyph="notification"/>
-               <span>13</span>
-             </Button>
-           </NavItem>
-           <NavItem className={cx('', s.headerIcon)}>
-             <Button>
-               <Icon glyph="settings"/>
-             </Button>
-           </NavItem>
+           
            <Dropdown isOpen={isOpen} toggle={toggleDropdown}>
              <DropdownToggle nav>
                <img className={cx('rounded-circle mr-sm', s.adminPhoto)} src={photo} alt="administrator" />
@@ -119,8 +103,8 @@
                <DropdownItem>
                  <NavLink to="/app/profile">Profile</NavLink>
                </DropdownItem>
-               <DropdownItem onClick={doLogout}>
-                 Logout
+               <DropdownItem >
+               <NavLink to="/login">Logout</NavLink>
                </DropdownItem>
              </DropdownMenu>
            </Dropdown>

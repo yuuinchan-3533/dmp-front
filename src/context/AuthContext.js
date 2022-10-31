@@ -1,4 +1,6 @@
+import { async } from "@firebase/util"
 import React, { useContext, useState, useEffect } from "react"
+import { getUserType } from "../api/fireStoreApi"
 import { auth } from "../firebase/firebase"
 
 const AuthContext = React.createContext()
@@ -36,12 +38,21 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user)
-      setLoading(false)
-    })
+    auth.onAuthStateChanged(function (user){
+      if(user){
+        const fetchData = async () =>{
+          const {type} = await getUserType(user.email);
+          const currentUser = user;
+          currentUser.type = type;
+          setCurrentUser(currentUser);
+          setLoading(false);
+        };
+        fetchData();
+      }
+      
+    });
 
-    return unsubscribe
+    
   }, [])
 
   const value = {

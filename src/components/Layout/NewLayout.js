@@ -53,15 +53,14 @@
            />
            <main className={s.content}>
              <Switch>
-               <Route path="/app/main" exact component={Dashboard} />
+               <Route path="/app/main" exact component={Profile} />
                <Route path="/app/user" exact component={Users} />
                <Route path="/app/users/add" exact component={UserProfile} />
                <Route path="/app/images" exact component={Images} />
                <Route path="/app/containers" exact component={Containers} />
                <Route path="/app/volumes" exact component={Volumes} />
                <Route path="/app/volumes/add" exact component={Volume} />
-               <Route path="/app/typography" exact component={Typography} />
-               <Route path="/app/tables" exact component={Tables} />
+               
                <Route path="/app/posts" component={Posts} />
                <Route path="/app/privacy" exact component={Privacy} />
                <Route path="/app/profile" exact component={Profile} />

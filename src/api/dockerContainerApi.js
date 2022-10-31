@@ -3,7 +3,6 @@
 
 export const getContainers = async () => {
 
-    alert("enter");
     let api='http://localhost:8080/'+'dockerapi/containers/json';
     let res;
     const axios = require('axios');
@@ -14,7 +13,6 @@ export const getContainers = async () => {
         return response.data;
     })
     .catch(function(error){
-        alert(error);
         console.log(error);
     })
     
@@ -25,7 +23,6 @@ export const getContainers = async () => {
 
 
   export const startContainer = async(id)=>{
-    alert("start"+id);
     let api='http://localhost:8080/'+'dockerapi/containers/'+id+'/start';
     let res;
     const axios = require('axios');
@@ -36,7 +33,6 @@ export const getContainers = async () => {
         return response.data;
     })
     .catch(function(error){
-        alert(error);
         console.log(error);
     })
     
@@ -48,7 +44,6 @@ export const getContainers = async () => {
 
   export const stopContainer = async(id)=>{
     
-    alert("stop"+id);
     let api='http://localhost:8080/'+'dockerapi/containers/'+id+'/stop';
     let res;
     const axios = require('axios');
@@ -59,7 +54,6 @@ export const getContainers = async () => {
         return response.data;
     })
     .catch(function(error){
-        alert(error);
         console.log(error);
     })
     

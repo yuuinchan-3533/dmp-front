@@ -86,3 +86,20 @@ export const deleteImages = async (id) => {
         console.log(error);
     })
   };
+
+  export const runImage = async (req) => {
+    let api=config.api_address+'dockerapi/images/run';
+    
+    const axios = require('axios');
+    alert(JSON.stringify(req))
+    return axios.post(api,JSON.stringify(req)).then((response)=>{
+        console.log(response.data);
+        
+        return response.data;
+        //alert("get res in getContainers:"+JSON.stringify(response.data));
+    })
+    .catch(function(error){
+        alert(error);
+        console.log(error);
+    })
+  };
