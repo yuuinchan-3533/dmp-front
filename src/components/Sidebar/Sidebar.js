@@ -40,44 +40,7 @@ const Sidebar = () => (
         headerLink="/app/volumes"
         glyph="volume"
       />
-      <LinksGroup
-        header="Typography"
-        headerLink="/app/typography"
-        glyph="typography"
-      />
-      <LinksGroup
-        header="Tables Basic"
-        headerLink="/app/tables"
-        glyph="tables"
-      />
-      <LinksGroup
-        header="Notifications"
-        headerLink="/app/notifications"
-        glyph="notifications"
-      />
-      <LinksGroup
-        header="Components"
-        headerLink="/app/components"
-        childrenLinks={[
-          {
-            name: 'Buttons',
-            link: '/app/components/buttons',
-          },
-          {
-            name: 'Charts',
-            link: '/app/components/charts',
-          },
-          {
-            name: 'Icons',
-            link: '/app/components/icons',
-          },
-          {
-            name: 'Maps',
-            link: '/app/components/maps',
-          },
-        ]}
-        glyph="components"
-      />
+     
     </ul>
   </nav>
 );
